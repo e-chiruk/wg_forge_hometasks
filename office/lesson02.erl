@@ -1,6 +1,6 @@
 -module(lesson02).
 
--export([init/0, get_names/1, filter_females/1]).
+-export([init/0, get_names/1, filter_females/1, filter_by_gender/2, partition_by_age/2]).
 
 init() ->
   [
@@ -27,3 +27,31 @@ filter_females([User|Tail], Acc) ->
     {user, _, _, female} -> filter_females(Tail, [User | Acc]);
     {user, _, _, male} -> filter_females(Tail, Acc)
   end.
+
+filter_by_gender(Users, Gender) when Gender == male orelse Gender == female ->
+  filter_by_gender(Users, Gender, []).
+
+
+
+filter_by_gender([], _Gender, Acc) -> lists:reverse(Acc);
+filter_by_gender([User | Tail], Gender, Acc) ->
+  {user, _Name, _Age, UserGender} = User,
+  if
+    Gender == UserGender -> filter_by_gender(Tail, Gender, [User | Acc]);
+    true -> filter_by_gender(Tail, Gender, Acc)
+  end.
+
+
+
+partition_by_age(Users, Age) ->
+  partition_by_age(Users, Age, {[], []}).
+
+partition_by_age([], _Age, {Older, Younger}) ->
+  {lists:reverse(Older), lists:reverse(Younger)};
+partition_by_age([User | Tail], Age, {Older, Younger}) ->
+  {user, _Name, UserAge, _Gender} = User,
+  NewAcc = if
+    UserAge > Age -> {[User | Older], Younger};
+    UserAge =< Age -> {Older, [User | Younger]}
+  end,
+  partition_by_age(Tail, Age, NewAcc).
