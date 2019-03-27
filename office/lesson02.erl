@@ -1,6 +1,7 @@
 -module(lesson02).
 
 -export([init/0, get_names/1, filter_females/1, filter_by_gender/2, partition_by_age/2]).
+-export([filter_females2/1]).
 
 init() ->
   [
@@ -26,6 +27,12 @@ filter_females([User|Tail], Acc) ->
   case User of
     {user, _, _, female} -> filter_females(Tail, [User | Acc]);
     {user, _, _, male} -> filter_females(Tail, Acc)
+  end.
+filter_females2([]) -> [];
+filter_females2([User | Tail]) ->
+  case User of
+    {user, _, _, female} -> [User | filter_females2(Tail)];
+    {user, _, _, male} -> filter_females2(Tail)
   end.
 
 filter_by_gender(Users, Gender) when Gender == male orelse Gender == female ->
@@ -55,3 +62,4 @@ partition_by_age([User | Tail], Age, {Older, Younger}) ->
     UserAge =< Age -> {Older, [User | Younger]}
   end,
   partition_by_age(Tail, Age, NewAcc).
+
