@@ -32,7 +32,7 @@ dropwhile_test() ->
 takewhile(Pred, List) ->
     takewhile(Pred, List, []).
 
-takewhile(_Pred, [], Acc) -> lists:reverse(Acc);
+takewhile(_Pred, [], Acc) -> task_2:reverse(Acc);
 takewhile(Pred, [Head | Tail], Acc) ->
     case Pred(Head) of
         true -> takewhile(Pred, Tail, [Head | Acc]);

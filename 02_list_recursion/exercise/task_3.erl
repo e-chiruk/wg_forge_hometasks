@@ -29,7 +29,7 @@ member_test() ->
 filter(Pred, List) ->
     filter(Pred, List, []).
 
-filter(_Pred, [], Acc) -> lists:reverse(Acc);
+filter(_Pred, [], Acc) -> task_2:reverse(Acc);
 filter(Pred, [Head | Tail], Acc) ->
     case Pred(Head) of
         true -> filter(Pred, Tail, [Head | Acc]);
